@@ -179,3 +179,13 @@ var MenuBuilder = function() {
     }
   }
 };
+
+
+window.onhashchange = function() {
+  var newHash = window.location.valueOf().hash;
+  console.log('hash change : ', newHash);
+
+  var hashChangeEl = document.getElementById('hash-change-notifier');
+  hashChangeEl.textContent = '';
+  hashChangeEl.appendChild(document.createTextNode('Navigated to: ' + newHash));
+}

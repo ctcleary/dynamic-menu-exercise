@@ -10,14 +10,19 @@
 	<script type="text/javascript" src="menubuilder.js"></script>
 </head>
 <body>
-	<div id="menu-container-bar" class="menu-container-bar"></div>
-	<p> Initial content. </p>
+	<div id="menu-container-bar" class="menu-container-bar">
+        <div id="menu-button" class="menu-button">=</div>
+    </div>
+	
+    <div id="hash-change-notifier">
+        
+    </div>
 
 	<script type="text/javascript">
 		// Run at bottom of page to be sure necessary elements exist.
 		var menuBuilder = new MenuBuilder();
-		
-		menuBuilder.setMenuEl('menu-container-bar');
+
+		menuBuilder.setMenuEl('menu-button');
 		menuBuilder.buildMenu(menuJSON);
 	</script>
 </body>

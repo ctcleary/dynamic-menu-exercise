@@ -5,77 +5,110 @@ body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.menu-container-bar	 {
+.menu-container-bar {
 	position: fixed;
 	top: 0;
 	left: 0;
 
 	background: #111010;
+	border-bottom: 2px solid #222120;
 	color: #c15506;
 	display: block;
 	height: 40px;
 	overflow: visible;
 	width: 100%;
+	z-index: 1;
 }
 
-.menu-container-bar ul {
+.menu-button {
+	cursor: pointer;
+	display: inline-block;
+	height: 40px;
+	width: 40px;
+	padding: 10px;
+	text-align: center;
+}
+
+.menu-button ul {
+	position: absolute;
+	left: 0;
+	top: 40px;
+
+	display: none;
 	list-style: none;
-	padding: 0;
 	margin: 0;
+	padding: 0;
+	text-align: left;
 	width: 280px;
 }
+.menu-button:hover>ul,
+.menu-button ul:hover {
+	display: inline-block;
+}
 
-.menu-container-bar ul li {
+.menu-button ul li {
 	position: relative; /* For absolute positioned childMenus. */
+
 	background: #111010;
 	border-top: none;
 	border-right: 2px solid #222120;
 	border-bottom: 2px solid #222120;
 	border-left: 2px solid #222120;
 	display: inline-block;
+	height: 40px;
 	width: 280px;
 }
-.menu-container-bar ul li:first-child {
+.menu-button ul li:first-child {
 	border-top: 2px solid #222120;
+	height: 42px;
 }
 
-.menu-container-bar ul li a {
+.menu-button ul li a {
 	color: inherit;
 	display: inline-block;
 	padding: 10px 0 10px 9px;
 	text-decoration: none;
+	height: 38px;
 	width: 100%;
 }
 
-.menu-container-bar ul li .childMenuMark {
+.menu-button ul li .childMenuMark {
 	position: absolute;
 	right: 10px;
 	top: 25%;
 }
 
-.menu-container-bar ul li a:hover {
+.menu-button ul li a:hover {
 	background: #171615;
 	color: #e1d5c0;
 }
 
-.menu-container-bar ul li {
+.menu-button ul li {
 	width: 100%;
 }
 
-.menu-container-bar ul li ul {
+.menu-button ul li ul {
 	position: absolute;
 	left: 100%;
 	top: -2px; /* Account for border */
 }
 
 /* Establish on-hover visibility */
-.menu-container-bar ul li ul,
-.menu-container-bar ul li ul li ul {
+.menu-button ul li ul,
+.menu-button ul li ul li ul {
 	display: none;
 }
 
-.menu-container-bar ul li:hover>ul,
-.menu-container-bar ul li ul:hover {
+.menu-button ul li:hover>ul,
+.menu-button ul li ul:hover {
 	display: inline-block;
 }
 
+
+#hash-change-notifier {
+	position: relative;
+	top: 100px;
+
+	text-align: center;
+	width: 100%;
+}
