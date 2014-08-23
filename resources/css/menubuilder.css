@@ -145,7 +145,7 @@ body {
 	width: 12px;
 }
 
-.menu-button ul li:hover a + .childMenuMark {
+.menu-button ul li:hover > .childMenuMark {
 	background-position: 0 -20px;
 }
 
