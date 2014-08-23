@@ -10,10 +10,12 @@
 	<script type="text/javascript" src="menubuilder.js"></script>
 </head>
 <body>
+	<div id="menu-container-bar" class="menu-container-bar"></div>
 	<p> Initial content. </p>
 
 	<script type="text/javascript">
-		console.log("menuJSON :: ", menuJSON);
+		// Run at bottom of page to be sure `body` exists.
+		MenuBuilder.buildMenu(menuJSON);
 	</script>
 </body>
 </html>

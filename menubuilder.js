@@ -111,3 +111,14 @@ var menuJSON = {
     }
   ]
 }
+
+
+// Establish menuBuilder object.
+var MenuBuilder = {
+  
+  menuContainer : document.getElementById('menu-container-bar'),
+  
+  buildMenu : function(menuJSON) {
+    console.log(menuJSON);
+  }
+}

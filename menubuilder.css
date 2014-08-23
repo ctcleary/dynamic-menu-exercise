@@ -1,3 +1,10 @@
-p {
-	color: blue;
+.menu-container-bar	 {
+	position: fixed;
+	top: 0;
+	left: 0;
+
+	display: block;
+	background: #171615;
+	height: 40px;
+	width: 100%;
 }
