@@ -15,7 +15,7 @@
     </div>
 	
     <div id="hash-change-notifier">
-        
+        No navigation has occurred.
     </div>
 
 	<script type="text/javascript">
@@ -23,6 +23,7 @@
 		var menuBuilder = new MenuBuilder();
 
 		menuBuilder.setMenuEl('menu-button');
+        menuBuilder.initHashChangeHandler('hash-change-notifier');
 		menuBuilder.buildMenu(menuJSON);
 	</script>
 </body>

@@ -176,16 +176,25 @@ var MenuBuilder = function() {
       }
 
       this.loopDepth--;
+    },
+
+    initHashChangeHandler : function(elementId) {
+      var prevHashChangeHandler;
+      if (window.onhashchange) {
+        prevHashChangeHandler = window.onhashchange;
+      }
+      window.onhashchange = function() {
+        if (prevHashChangeHandler !== undefined) {
+          prevHashChangeHandler();
+        }
+        var newHash = window.location.valueOf().hash;
+
+        var hashChangeEl = document.getElementById(elementId);
+        hashChangeEl.textContent = '';
+        hashChangeEl.appendChild(document.createTextNode('Navigated to: ' + newHash));
+      }
     }
   }
 };
 
 
-window.onhashchange = function() {
-  var newHash = window.location.valueOf().hash;
-  console.log('hash change : ', newHash);
-
-  var hashChangeEl = document.getElementById('hash-change-notifier');
-  hashChangeEl.textContent = '';
-  hashChangeEl.appendChild(document.createTextNode('Navigated to: ' + newHash));
-}
