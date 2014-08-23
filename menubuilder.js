@@ -52,62 +52,66 @@ var menuJSON = {
               href  : '#gameplay-child-2'
             }
           ]
+        },
+        {
+          label : 'Classes',
+          href  : '#classes',
+          childMenuItems : [
+            {
+              label : 'Barbarian',
+              href  : '#barbarian'
+            },
+            {
+              label : 'Demon Hunter',
+              href  : '#demon-hunter'
+            },
+            {
+              label : 'Monk',
+              href  : '#monk'
+            },
+            {
+              label : 'Witch Doctor',
+              href  : '#witch-doctor'
+            },
+            {
+              label : 'Wizard',
+              href  : '#wizard'
+            }
+          ]
+        },
+        {
+          label : 'Beta',
+          href  : '#beta',
+          childMenuItems : [
+            {
+              label : 'Beta Child 1',
+              href  : '#beta-child-1'
+            },
+            {
+              label : 'Beta Child 2',
+              href  : '#beta-child-2'
+            }
+          ]
+        },
+        {
+          label : 'Support',
+          href  : '#support',
+          childMenuItems : [
+            {
+              label : 'Support Child 1',
+              href  : '#support-child-1'
+            },
+            {
+              label : 'Support Child 2',
+              href  : '#support-child-2'
+            }
+          ]
         }
       ]
     },
     {
-      label : 'Classes',
-      href  : '#classes',
-      childMenuItems : [
-        {
-          label : 'Barbarian',
-          href  : '#barbarian'
-        },
-        {
-          label : 'Demon Hunter',
-          href  : '#demon-hunter'
-        },
-        {
-          label : 'Monk',
-          href  : '#monk'
-        },
-        {
-          label : 'Witch Doctor',
-          href  : '#witch-doctor'
-        },
-        {
-          label : 'Wizard',
-          href  : '#wizard'
-        }
-      ]
-    },
-    {
-      label : 'Beta',
-      href  : '#beta',
-      childMenuItems : [
-        {
-          label : 'Beta Child 1',
-          href  : '#beta-child-1'
-        },
-        {
-          label : 'Beta Child 2',
-          href  : '#beta-child-2'
-        }
-      ]
-    },
-    {
-      label : 'Support',
-      href  : '#support',
-      childMenuItems : [
-        {
-          label : 'Support Child 1',
-          href  : '#support-child-1'
-        },
-        {
-          label : 'Support Child 2',
-          href  : '#support-child-2'
-        }
-      ]
+      label : 'Services',
+      href  : '#services'
     }
   ]
 }
@@ -144,6 +148,7 @@ var MenuBuilder = function() {
 
     menuLoopRecursive : function(parentMenu, menuItems) {
       this.loopDepth++; // Track loop depth in case we need it later.
+      console.log('Curr loopDepth : ', this.loopDepth);
 
       for (var i = 0; i < menuItems.length; i++) {
         var item = menuItems[i];
@@ -159,7 +164,10 @@ var MenuBuilder = function() {
         parentMenu.appendChild(liEl);
 
         if (item.childMenuItems) {
-          console.log('has children');
+          var childMenu = this.makeEl('ul', 'childMenu');
+          liEl.appendChild(childMenu);
+
+          this.menuLoopRecursive(childMenu, item.childMenuItems);
         }
       }
 
