@@ -5,9 +5,9 @@
 
 	<!-- Style sheets -->
 	<link rel="stylesheet" type="text/css" href="resources/css/menubuilder.css" />
-
 	<!-- Javascripts -->
 	<script type="text/javascript" src="resources/js/menubuilder.js"></script>
+
 </head>
 <body>
 	<div id="menu-container-bar" class="menu-container-bar">
@@ -15,16 +15,10 @@
     </div>
 	
     <div id="hash-change-notifier">
-        Use menu to 'Navigate.'
+        Use the menu to 'Navigate.'
     </div>
 
-	<script type="text/javascript">
-		// Run at bottom of page to be sure necessary elements exist.
-		var menuBuilder = new MenuBuilder();
-
-		menuBuilder.setMenuEl('menu-button');
-        menuBuilder.initHashChangeHandler('hash-change-notifier');
-		menuBuilder.buildMenu(menuJSON);
-	</script>
+    <!-- End of doc Javascripts -->
+    <script type="text/javascript" src="resources/js/runmenubuilder.js"></script>
 </body>
 </html>
