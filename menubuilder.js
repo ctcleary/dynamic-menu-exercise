@@ -165,7 +165,6 @@ var MenuBuilder = function() {
 
         if (item.childMenuItems) {
           var childMenuMark = this.makeEl('span', 'childMenuMark');
-          childMenuMark.textContent = '>';
           liEl.appendChild(childMenuMark);
 
           var childMenu = this.makeEl('ul', 'childMenu');
@@ -189,7 +188,7 @@ var MenuBuilder = function() {
         }
         var newHash = window.location.valueOf().hash;
 
-        var hashChangeEl = document.getElementById(elementId);
+        var hashChangeEl = document.getElementById('hash-change-notifier');
         hashChangeEl.textContent = '';
         hashChangeEl.appendChild(document.createTextNode('Navigated to: ' + newHash));
       }

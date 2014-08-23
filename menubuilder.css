@@ -12,7 +12,6 @@ body {
 
 	background: #111010;
 	border-bottom: 2px solid #222120;
-	color: #c15506;
 	display: block;
 	height: 40px;
 	overflow: visible;
@@ -22,6 +21,7 @@ body {
 
 .menu-button {
 	cursor: pointer;
+	color: #c15506;
 	border-top: 2px solid #222120;
 	border-right: 2px solid #222120;
 	border-left: 2px solid #222120;
@@ -44,6 +44,7 @@ body {
 	text-align: left;
 	width: 280px;
 }
+
 .menu-button:hover>ul,
 .menu-button ul:hover {
 	display: inline-block;
@@ -75,15 +76,24 @@ body {
 	width: 100%;
 }
 
-.menu-button ul li .childMenuMark {
-	position: absolute;
-	right: 10px;
-	top: 25%;
-}
 
 .menu-button ul li a:hover {
 	background: #171615;
-	color: #e1d5c0;
+	color: #dcc296;
+}
+
+.menu-button ul li .childMenuMark {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+
+	background: url('childMenuMark_toggle.png') no-repeat 0 0 transparent;
+	height: 20px;
+	width: 12px;
+}
+
+.menu-button ul li a:hover ~ .childMenuMark {
+	background-position: 0 -20px;
 }
 
 .menu-button ul li {
