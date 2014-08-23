@@ -192,8 +192,8 @@ var MenuBuilder = function() {
       for (var i = 0; i < menuItems.length; i++) {
         var item = menuItems[i];
 
-        var liEl = this_makeEl('li', 'menuItem');
-        var anchorEl = this_makeEl('a', 'menuLabel');
+        var liEl = this._makeEl('li', 'menuItem');
+        var anchorEl = this._makeEl('a', 'menuLabel');
         anchorEl.href = item.href;
 
         var anchorText = document.createTextNode(item.label);
@@ -206,10 +206,10 @@ var MenuBuilder = function() {
           // If this menu has childMenuItems, add a <ul> element
           // then recursively run _menuLoopRecursive to populate the childMenu.
 
-          var childMenuMark = this_makeEl('span', 'childMenuMark');
+          var childMenuMark = this._makeEl('span', 'childMenuMark');
           liEl.appendChild(childMenuMark);
 
-          var childMenu = this_makeEl('ul', 'childMenu');
+          var childMenu = this._makeEl('ul', 'childMenu');
           liEl.appendChild(childMenu);
           
           this._menuLoopRecursive(childMenu, item.childMenuItems);
@@ -224,7 +224,7 @@ var MenuBuilder = function() {
         console.warn('Must provide an element type to MenuBuilder._makeEl()');
         return;
       }
-      
+
       var el = document.createElement(type);
       if (typeof className !== 'undefined') { el.classList.add(className); }
       if (typeof id !== 'undefined') { el.id = id; }
