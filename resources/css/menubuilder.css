@@ -1,16 +1,28 @@
+
+/* ---------------------
+
+   General document styles.
+   
+----------------------- */
 body * {
 	box-sizing: border-box;
 }
 body {
+	background-color: #6F6D6B;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+/* ---------------------
+
+   Menu header bar and menu item.
+   
+----------------------- */
 .menu-container-bar {
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
 
-	background: #111010;
+	background-color: #111010;
 	border-bottom: 2px solid #222120;
 	display: block;
 	height: 40px;
@@ -44,6 +56,12 @@ body {
 	background-position: 0 -20px;
 }
 
+
+/* ---------------------
+
+   Actual menu styling
+   
+----------------------- */
 .menu-button ul {
 	position: absolute;
 	left: 0;
@@ -63,9 +81,9 @@ body {
 }
 
 .menu-button ul li {
-	position: relative; /* For absolute positioned childMenus. */
+	position: relative; /* For `absolute` positioned childMenus. */
 
-	background: #111010;
+	background-color: #111010;
 	border-top: none;
 	border-right: 2px solid #222120;
 	border-bottom: 2px solid #222120;
@@ -74,38 +92,10 @@ body {
 	height: 40px;
 	width: 280px;
 }
+
 .menu-button ul li:first-child {
 	border-top: 2px solid #222120;
 	height: 42px;
-}
-
-.menu-button ul li a {
-	color: inherit;
-	display: inline-block;
-	padding: 10px 0 10px 9px;
-	text-decoration: none;
-	height: 38px;
-	width: 100%;
-}
-
-
-.menu-button ul li a:hover {
-	background: #171615;
-	color: #dcc296;
-}
-
-.menu-button ul li .childMenuMark {
-	position: absolute;
-	right: 10px;
-	top: 10px;
-
-	background: url('../img/childMenuMark_toggle.png') no-repeat 0 0 transparent;
-	height: 20px;
-	width: 12px;
-}
-
-.menu-button ul li a:hover ~ .childMenuMark {
-	background-position: 0 -20px;
 }
 
 .menu-button ul li {
@@ -118,7 +108,53 @@ body {
 	top: -2px; /* Account for border */
 }
 
-/* Establish on-hover visibility */
+/* ---------------------
+
+   Style menu anchors,
+   and on-hover behaviors
+
+----------------------- */
+.menu-button ul li a {
+  	transition: background-color 0.5s ease,
+  				color 0.5s ease;
+
+	color: inherit;
+	display: inline-block;
+	padding: 9px 0 0 9px;
+	text-decoration: none;
+	height: 38px;
+	width: 100%;
+}
+
+.menu-button ul li a:hover {
+	background-color: #171615;
+	color: #dcc296;
+}
+.menu-button ul li a:active {
+	/* Give a little feedback on click */
+	background-color: #3D3C3A;
+}
+
+.menu-button ul li .childMenuMark {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+
+	background: url('../img/childMenuMark_toggle.png') no-repeat 0 0 transparent;
+	height: 20px;
+	width: 12px;
+}
+
+.menu-button ul li a:hover + .childMenuMark {
+	background-position: 0 -20px;
+}
+
+/* ---------------------
+
+   Establish on-hover visibility
+   of menu items.
+   
+----------------------- */
 .menu-button ul li ul,
 .menu-button ul li ul li ul {
 	display: none;
@@ -131,8 +167,11 @@ body {
 
 #hash-change-notifier {
 	position: relative;
-	top: 100px;
+	top: 200px;
 
+	color: #9C9B99;
+	font-size: 20px;
+	font-weight: 700;
 	text-align: center;
 	width: 100%;
 }

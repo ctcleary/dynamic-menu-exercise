@@ -131,8 +131,6 @@ var MenuBuilder = function() {
     },
     
     buildMenu : function(menuJSON) {
-      console.log(menuJSON);
-
       var topMenu = this.makeEl('ul', 'topMenu', 'topMenu');
       this.menuContainer.appendChild(topMenu);
 
@@ -148,7 +146,6 @@ var MenuBuilder = function() {
 
     menuLoopRecursive : function(parentMenu, menuItems) {
       this.loopDepth++; // Track loop depth in case we need it later.
-      console.log('Curr loopDepth : ', this.loopDepth);
 
       for (var i = 0; i < menuItems.length; i++) {
         var item = menuItems[i];
