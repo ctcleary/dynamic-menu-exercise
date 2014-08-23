@@ -35,7 +35,6 @@ body {
 	border-top: 2px solid #222120;
 	border-right: 2px solid #222120;
 	border-left: 2px solid #222120;
-	cursor: pointer;
 	color: #c15506;
 	display: inline-block;
 	height: 40px;
@@ -119,6 +118,7 @@ body {
   				color 0.5s ease;
 
 	color: inherit;
+	cursor: default;
 	display: inline-block;
 	padding: 9px 0 0 9px;
 	text-decoration: none;
