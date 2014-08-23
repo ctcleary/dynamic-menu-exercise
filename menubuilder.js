@@ -114,11 +114,56 @@ var menuJSON = {
 
 
 // Establish menuBuilder object.
-var MenuBuilder = {
-  
-  menuContainer : document.getElementById('menu-container-bar'),
-  
-  buildMenu : function(menuJSON) {
-    console.log(menuJSON);
+var MenuBuilder = function() {
+  return {
+    // Store a reference.
+    menuContainer : undefined,
+    loopDepth : -1,
+
+    setMenuEl : function(id) {
+      if (this.menuContainer === undefined) {
+        this.menuContainer = document.getElementById(id);
+      }
+    },
+    
+    buildMenu : function(menuJSON) {
+      console.log(menuJSON);
+
+      var topMenu = this.makeEl('ul', 'topMenu', 'topMenu');
+      this.menuContainer.appendChild(topMenu);
+
+      this.menuLoopRecursive(topMenu, menuJSON.menuItems);
+    },
+
+    makeEl : function(type, classes, id) {
+      var el = document.createElement(type);
+      if (typeof classes !== 'undefined') { el.classNames = classes; }
+      if (typeof id !== 'undefined') { el.id = id; }
+      return el;
+    },
+
+    menuLoopRecursive : function(parentMenu, menuItems) {
+      this.loopDepth++; // Track loop depth in case we need it later.
+
+      for (var i = 0; i < menuItems.length; i++) {
+        var item = menuItems[i];
+
+        var liEl = this.makeEl('li', 'menuItem');
+        var anchorEl = this.makeEl('a', 'menuLabel');
+        anchorEl.href = item.href;
+
+        var anchorText = document.createTextNode(item.label);
+        anchorEl.appendChild(anchorText);
+
+        liEl.appendChild(anchorEl);
+        parentMenu.appendChild(liEl);
+
+        if (item.childMenuItems) {
+          console.log('has children');
+        }
+      }
+
+      this.loopDepth--;
+    }
   }
-}
+};

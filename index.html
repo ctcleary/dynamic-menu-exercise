@@ -14,8 +14,11 @@
 	<p> Initial content. </p>
 
 	<script type="text/javascript">
-		// Run at bottom of page to be sure `body` exists.
-		MenuBuilder.buildMenu(menuJSON);
+		// Run at bottom of page to be sure necessary elements exist.
+		var menuBuilder = new MenuBuilder();
+		
+		menuBuilder.setMenuEl('menu-container-bar');
+		menuBuilder.buildMenu(menuJSON);
 	</script>
 </body>
 </html>

@@ -1,10 +1,51 @@
+body * {
+	box-sizing: border-box;
+}
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 .menu-container-bar	 {
 	position: fixed;
 	top: 0;
 	left: 0;
 
 	display: block;
-	background: #171615;
+	background: #111010;
 	height: 40px;
+	overflow: visible;
 	width: 100%;
+}
+
+.menu-container-bar ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 280px;
+}
+
+.menu-container-bar ul li {
+	position: relative; /* For absolute positioned childMenus. */
+
+	background: #111010;
+	display: inline-block;
+	width: 280px;
+}
+
+.menu-container-bar ul li a {
+	color: #c15506;
+	display: inline-block;
+	padding: 10px 0 10px 9px;
+	text-decoration: none;
+	width: 100%;
+}
+
+.menu-container-bar ul li a:hover {
+	background: #171615;
+	color: #e1d5c0;
+}
+
+.menu-container-bar ul li ul li {
+	position: absolute;
+	left: 100%;
 }
