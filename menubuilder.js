@@ -139,9 +139,9 @@ var MenuBuilder = function() {
       this.menuLoopRecursive(topMenu, menuJSON.menuItems);
     },
 
-    makeEl : function(type, classes, id) {
+    makeEl : function(type, className, id) {
       var el = document.createElement(type);
-      if (typeof classes !== 'undefined') { el.classNames = classes; }
+      if (typeof className !== 'undefined') { el.classList.add(className); }
       if (typeof id !== 'undefined') { el.id = id; }
       return el;
     },
@@ -164,6 +164,10 @@ var MenuBuilder = function() {
         parentMenu.appendChild(liEl);
 
         if (item.childMenuItems) {
+          var childMenuMark = this.makeEl('span', 'childMenuMark');
+          childMenuMark.textContent = '>';
+          liEl.appendChild(childMenuMark);
+
           var childMenu = this.makeEl('ul', 'childMenu');
           liEl.appendChild(childMenu);
 

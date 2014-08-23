@@ -10,8 +10,9 @@ body {
 	top: 0;
 	left: 0;
 
-	display: block;
 	background: #111010;
+	color: #c15506;
+	display: block;
 	height: 40px;
 	overflow: visible;
 	width: 100%;
@@ -27,16 +28,29 @@ body {
 .menu-container-bar ul li {
 	position: relative; /* For absolute positioned childMenus. */
 	background: #111010;
+	border-top: none;
+	border-right: 2px solid #222120;
+	border-bottom: 2px solid #222120;
+	border-left: 2px solid #222120;
 	display: inline-block;
 	width: 280px;
 }
+.menu-container-bar ul li:first-child {
+	border-top: 2px solid #222120;
+}
 
 .menu-container-bar ul li a {
-	color: #c15506;
+	color: inherit;
 	display: inline-block;
 	padding: 10px 0 10px 9px;
 	text-decoration: none;
 	width: 100%;
+}
+
+.menu-container-bar ul li .childMenuMark {
+	position: absolute;
+	right: 10px;
+	top: 25%;
 }
 
 .menu-container-bar ul li a:hover {
@@ -51,7 +65,7 @@ body {
 .menu-container-bar ul li ul {
 	position: absolute;
 	left: 100%;
-	top: 0;
+	top: -2px; /* Account for border */
 }
 
 /* Establish on-hover visibility */
