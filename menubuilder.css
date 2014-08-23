@@ -26,7 +26,6 @@ body {
 
 .menu-container-bar ul li {
 	position: relative; /* For absolute positioned childMenus. */
-
 	background: #111010;
 	display: inline-block;
 	width: 280px;
@@ -45,7 +44,24 @@ body {
 	color: #e1d5c0;
 }
 
-.menu-container-bar ul li ul li {
+.menu-container-bar ul li {
+	width: 100%;
+}
+
+.menu-container-bar ul li ul {
 	position: absolute;
 	left: 100%;
+	top: 0;
 }
+
+/* Establish on-hover visibility */
+.menu-container-bar ul li ul,
+.menu-container-bar ul li ul li ul {
+	display: none;
+}
+
+.menu-container-bar ul li:hover>ul,
+.menu-container-bar ul li ul:hover {
+	display: inline-block;
+}
+
