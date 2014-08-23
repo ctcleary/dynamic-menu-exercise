@@ -20,16 +20,28 @@ body {
 }
 
 .menu-button {
-	cursor: pointer;
-	color: #c15506;
 	border-top: 2px solid #222120;
 	border-right: 2px solid #222120;
 	border-left: 2px solid #222120;
+	cursor: pointer;
+	color: #c15506;
 	display: inline-block;
 	height: 40px;
-	width: 40px;
 	padding: 8px;
 	text-align: center;
+	width: 40px;
+}
+
+.menu-button i {
+	background: url('menuButton_hamburgerIcon_toggle.png') no-repeat 0 0 transparent;
+	display: inline-block;
+	height: 20px;
+	overflow: hidden;
+	width: 20px;
+}
+
+.menu-button:hover i {
+	background-position: 0 -20px;
 }
 
 .menu-button ul {
@@ -116,7 +128,6 @@ body {
 .menu-button ul li ul:hover {
 	display: inline-block;
 }
-
 
 #hash-change-notifier {
 	position: relative;
