@@ -126,7 +126,7 @@ body {
 	width: 100%;
 }
 
-.menu-button ul li a:hover {
+.menu-button ul li:hover>a {
 	background-color: #171615;
 	color: #dcc296;
 }
