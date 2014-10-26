@@ -4,7 +4,7 @@ var DocumentUtility = function() {
 
 DocumentUtility.prototype = {
   makeEl: function(type) {
-    return document.createElement('div');
+    return document.createElement(type);
   },
 
   makeElWithId: function(type, id) {
@@ -26,7 +26,7 @@ DocumentUtility.prototype = {
     return el;
   },
 
-  getEl: function(id) {
+  getElById: function(id) {
     return document.getElementById(id);
   },
 
@@ -34,17 +34,16 @@ DocumentUtility.prototype = {
     return document.getElementsByClassName(className);
   },
 
-  getOrCreateById: function(id, opt_type, opt_classNames) {
-    if (this.getEl(id)) {
-      return this.getEl(id);
-    } else {
-      var elType = (opt_type) ? opt_type : 'div';
+  getOrCreateById: function(id, type, opt_classNames) {
+    if (this.getElById(id)) {
+      return this.getElById(id);
 
+    } else {
       if (opt_classNames) {
-        return this.makeElWithIdAndClass(elType, id, opt_classNames);
+        return this.makeElWithIdAndClass(type, id, opt_classNames);
 
       } else {
-        return this.makeElWithId(elType, id);
+        return this.makeElWithId(type, id);
       }
     }
   }
