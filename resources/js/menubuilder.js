@@ -43,6 +43,33 @@ var MenuBuilder = function(optionsHash) {
     }
   }
 
+  function _setActiveMenuItem(hash) {
+      var labelEls = document.getElementsByClassName('menu-label');
+      var currActiveEl;
+      var newActiveEl;
+
+      searchLoop:
+      for (var i = 0; i < labelEls.length; i++) {
+        var currLabelHash = labelEls[i].href.substr(labelEls[i].href.indexOf('#'));
+        if (currLabelHash === hash) {
+          newActiveEl = labelEls[i];
+        }
+
+        if (labelEls[i].classList.contains('active')) {
+          currActiveEl = labelEls[i];
+        }
+
+        if (currActiveEl && newActiveEl) {
+          break searchLoop;
+        }
+      }
+
+      if (currActiveEl) {
+        currActiveEl.classList.remove('active');
+      }
+      newActiveEl.classList.add('active');
+    }
+
   // -- PRIVATE VARIABLES --
   // Use the passed options or establish defaults.
   var _menuJSON = optionsHash.menuJSON || { menuItems : [{ label : 'Example', href  : '#example' }] };
@@ -130,7 +157,7 @@ var MenuBuilder = function(optionsHash) {
           oldEl.parentNode.replaceChild(newEl, oldEl); // Replace it
           _this.hashChangeEl(null, newEl); // Re-set the MenuBuilder's reference to the new El.
 
-          _this._setActiveMenuItem(newHash);
+          _setActiveMenuItem(newHash);
 
           if (prevHashChangeHandler !== undefined) {
             prevHashChangeHandler();
@@ -139,34 +166,6 @@ var MenuBuilder = function(optionsHash) {
       }
 
       return this;
-    },
-
-    _setActiveMenuItem : function(hash) {
-      var labelEls = document.getElementsByClassName('menu-label');
-      var currActiveEl;
-      var newActiveEl;
-
-      searchLoop:
-      for (var i = 0; i < labelEls.length; i++) {
-        var currLabelHash = labelEls[i].href.substr(labelEls[i].href.indexOf('#'));
-        if (currLabelHash === hash) {
-          newActiveEl = labelEls[i];
-        }
-
-        if (labelEls[i].classList.contains('active')) {
-          currActiveEl = labelEls[i];
-        }
-
-        if (currActiveEl && newActiveEl) {
-          break searchLoop;
-        }
-      }
-
-      if (currActiveEl) {
-        currActiveEl.classList.remove('active');
-      }
-      newActiveEl.classList.add('active');
     }
-
   };
 };
