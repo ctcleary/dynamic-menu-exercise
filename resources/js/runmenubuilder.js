@@ -135,8 +135,7 @@ var menuBuilder = new MenuBuilder({
 	menuId : 'menu-button',
 	hashChangeId : 'hash-change-notifier',
 	menuJSON : menuJSON
-});
-menuBuilder.build();
+}).build();
 
 // menuBuilder.setMenuEl('menu-button');
 // menuBuilder.initHashChangeHandler('hash-change-notifier');
