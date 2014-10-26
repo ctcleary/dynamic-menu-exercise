@@ -49,7 +49,6 @@ var MenuBuilder = function(optionsHash) {
       var currActiveEl;
       var newActiveEl;
 
-      searchLoop:
       for (var i = 0; i < labelEls.length; i++) {
         var currLabelHash = labelEls[i].href.substr(labelEls[i].href.indexOf('#'));
         if (currLabelHash === hash) {
@@ -61,7 +60,7 @@ var MenuBuilder = function(optionsHash) {
         }
 
         if (currActiveEl && newActiveEl) {
-          break searchLoop;
+          break;
         }
       }
 
