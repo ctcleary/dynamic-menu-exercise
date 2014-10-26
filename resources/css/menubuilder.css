@@ -115,7 +115,7 @@ body {
    and on-hover behaviors
 
 ----------------------- */
-.menu-button ul li a {
+.menu-button ul li .menu-label {
   	transition: background-color 0.15s ease,
   				color 0.25s ease;
 
@@ -128,15 +128,15 @@ body {
 	width: 100%;
 }
 
-.menu-button ul li:hover>a {
+.menu-button ul li:hover>.menu-label {
 	background-color: #171615;
 	color: #dcc296;
 }
-.menu-button ul li a:active {
+.menu-button ul li .menu-label:active {
 	/* Give a little feedback on click */
 	background-color: #302f2e;
 }
-.menu-button ul li a.active {
+.menu-button ul li .menu-label.active {
 	/* The currently active "page" based on the label's hash */
 	font-weight: 700;
 }
