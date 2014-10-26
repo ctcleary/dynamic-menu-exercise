@@ -95,6 +95,10 @@ var MenuBuilder = function(optionsHash) {
       this.menuContainerEl().appendChild(topMenu);
       this.initHashChangeHandler();
 
+      if (window.location.valueOf().hash) {
+        this._setActiveMenuItem(window.location.valueOf().hash);
+      }
+
       return this;
     },
 
@@ -138,7 +142,30 @@ var MenuBuilder = function(optionsHash) {
     },
 
     _setActiveMenuItem : function(hash) {
-      // var labelItems = 
+      var labelEls = document.getElementsByClassName('menu-label');
+      var currActiveEl;
+      var newActiveEl;
+
+      searchLoop:
+      for (var i = 0; i < labelEls.length; i++) {
+        var currLabelHash = labelEls[i].href.substr(labelEls[i].href.indexOf('#'));
+        if (currLabelHash === hash) {
+          newActiveEl = labelEls[i];
+        }
+
+        if (labelEls[i].classList.contains('active')) {
+          currActiveEl = labelEls[i];
+        }
+
+        if (currActiveEl && newActiveEl) {
+          break searchLoop;
+        }
+      }
+
+      if (currActiveEl) {
+        currActiveEl.classList.remove('active');
+      }
+      newActiveEl.classList.add('active');
     }
 
   };

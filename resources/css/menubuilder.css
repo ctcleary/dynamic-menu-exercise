@@ -136,6 +136,10 @@ body {
 	/* Give a little feedback on click */
 	background-color: #302f2e;
 }
+.menu-button ul li a.active {
+	/* The currently active "page" based on the label's hash */
+	font-weight: 700;
+}
 
 .menu-button ul li .child-menu-mark {
 	position: absolute;
