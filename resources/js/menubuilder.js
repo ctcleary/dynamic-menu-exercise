@@ -4,24 +4,26 @@
 var MenuBuilder = function(optionsHash) {
   // -- PRIVATE VARIABLES --
   // Use the passed options or establish defaults.
-  var docUtil = new DocumentUtility();
-
   var _menuJSON = optionsHash.menuJSON || { menuItems : [{ label : 'Example', href  : '#example' }] };
 
+  // Use passed options or fall back to defaults.
   var options = {
     menuContainerId : optionsHash.menuContainerId || 'menu-button',
     hashChangeId :    optionsHash.hashChangeIdl   || 'hash-change-notifier'
   };
 
-  var _menuContainerEl = docUtil.getOrCreateById(options.menuContainerId, 'div');
-  var _hashChangeEl    = docUtil.getOrCreateById(options.hashChangeId, 'div', 'pulse');
+  // Get existing or create new elements
+  var _menuContainerEl = this.docUtil.getOrCreateById(options.menuContainerId, 'div');
+  var _hashChangeEl    = this.docUtil.getOrCreateById(options.hashChangeId, 'div', 'pulse');
 
+  // Helpers
   var _hashChangeHandlerInitialized = false;  // Helper boolean to prevent adding multiple event handler
   var _topMenuId = 'top-menu-' + (Math.floor(Math.random()*1000)); // Helper id to prevent adding multiple dom elements
 
+  // -- PUBLIC FUNCTIONS --
   this.menuContainerEl = function(opt_id, opt_newEl) {
     if (opt_id) {
-      _menuContainerEl = docUtil.getOrCreateById(opt_id, 'div');
+      _menuContainerEl = this.docUtil.getOrCreateById(opt_id, 'div');
       return this;
 
     } else if (opt_newEl) {
@@ -35,7 +37,7 @@ var MenuBuilder = function(optionsHash) {
 
   this.hashChangeEl = function(opt_id, opt_newEl) {
     if (opt_id) {
-      _hashChangeEl = docUtil.getOrCreateById(opt_id, 'div', 'pulse');
+      _hashChangeEl = this.docUtil.getOrCreateById(opt_id, 'div', 'pulse');
       _hashChangeEl.classList.add('pulse');
       return this;
 
@@ -49,7 +51,7 @@ var MenuBuilder = function(optionsHash) {
   };
     
   this.build = function() {
-    var topMenu = docUtil.getOrCreateById(_topMenuId, 'ul', 'top-menu');
+    var topMenu = this.docUtil.getOrCreateById(_topMenuId, 'ul', 'top-menu');
     this.menuLoopRecursive(topMenu, _menuJSON.menuItems);
 
     this.menuContainerEl().appendChild(topMenu);
@@ -67,31 +69,28 @@ var MenuBuilder = function(optionsHash) {
       _hashChangeHandlerInitialized = true;
 
       var _this = this;
-
       var prevHashChangeHandler;
       if (window.onhashchange) {
         // Make sure we don't prevent any other onhashchange handlers
         // from doing their job by storing and calling previous handlers.
-        prevHashChangeHandler = window.onhashchange;
+        prevHashChangeHandler = window.onhashchange;// Don't prevent other onhashchange handlers from doing their job.
       }
 
       window.onhashchange = function() {
         // Do some DOM Element gymnastics to re-trigger the CSS animation:
-        // Clone, then replace the hashChangeEl, then re-set the MenuBuilder's reference.
-        
-        var oldEl = _this.hashChangeEl(); // Scoped to MenuBuilder
-        oldEl.textContent = ''; // Clear it out.
-
+        var oldEl = _this.hashChangeEl(); // Get it
         var newEl = oldEl.cloneNode(true); // Clone it
+        newEl.textContent = ''; // Clear out the Clone, then change contents
         newEl.appendChild(document.createTextNode('Navigated to: ' + _this.getHashPath()));
 
-        oldEl.parentNode.replaceChild(newEl, oldEl); // Replace it
-        _this.hashChangeEl(null, newEl); // Re-set the MenuBuilder's reference to the new El.
-
+        oldEl.parentNode.replaceChild(newEl, oldEl); // Replace old with new.
+        _this.hashChangeEl(undefined, newEl); // Re-set the MenuBuilder's reference to the newEl.
+        
+        // Set css for 'active' menu item.
         _this.setActiveMenuItem(_this.getHashPath());
 
         if (prevHashChangeHandler !== undefined) {
-          prevHashChangeHandler();
+          prevHashChangeHandler(); // Call it if we have a previous handler.
         }
       };
     }
