@@ -4,12 +4,19 @@
 var MenuBuilder = function(optionsHash) {
   // -- PRIVATE FUNCTIONS --
   // Element maker utility.
-  function _makeEl(type, className, id) {
+  function _makeEl(type, opt_className, opt_id) {
     var el = document.createElement(type);
-    if (className) { el.classList.add(className); }
-    if (id) { el.id = id; }
+    if (opt_className) { el.classList.add(opt_className); }
+    if (opt_id) { el.id = opt_id; }
     return el;
   }
+
+  function _makeIdEl(type, id) {
+    _makeEl(type, '', id);
+  }
+
+  // _makeClassEl
+  // _makeEl('div', '', 'menu-button');
   
   // parentMenu : A `ul` or `ol` dom element.
   // menuItems  : An array of JSON objects with keys: { label: ..., href: ..., childMenuItems: ...(optional) }. 
@@ -45,11 +52,12 @@ var MenuBuilder = function(optionsHash) {
   }
 
   function _setActiveMenuItem(hash) {
-      var labelEls = document.getElementsByClassName('menu-label');
-      var currActiveEl;
-      var newActiveEl;
+    var labelEls = document.getElementsByClassName('menu-label');
+    var currActiveEl;
+    var newActiveEl;
 
-      for (var i = 0; i < labelEls.length; i++) {
+    for (var i = 0; i < labelEls.length; i++) {
+      if (!currActiveEl && !newActiveEl) {
         var currLabelHash = labelEls[i].href.substr(labelEls[i].href.indexOf('#'));
         if (currLabelHash === hash) {
           newActiveEl = labelEls[i];
@@ -58,17 +66,14 @@ var MenuBuilder = function(optionsHash) {
         if (labelEls[i].classList.contains('active')) {
           currActiveEl = labelEls[i];
         }
-
-        if (currActiveEl && newActiveEl) {
-          break;
-        }
       }
-
-      if (currActiveEl) {
-        currActiveEl.classList.remove('active');
-      }
-      newActiveEl.classList.add('active');
     }
+
+    if (currActiveEl) {
+      currActiveEl.classList.remove('active');
+    }
+    newActiveEl.classList.add('active');
+  }
 
   // -- PRIVATE VARIABLES --
   // Use the passed options or establish defaults.
@@ -78,6 +83,10 @@ var MenuBuilder = function(optionsHash) {
     menuContainerId : optionsHash.menuContainerId || 'menu-button',
     hashChangeId :    optionsHash.hashChangeIdl   || 'hash-change-notifier'
   };
+
+
+  // TODO : Make DocumentUtility
+  // var _menuContainerEl = DocumentUtility.getOrCreate(options.menuContainerId);
 
   var _menuContainerEl = document.getElementById(options.menuContainerId) || _makeEl('div', '', options.menuContainerId);
   var _hashChangeEl    = document.getElementById(options.hashChangeId)    || _makeEl('div', '', options.hashChangeId);
