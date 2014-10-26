@@ -38,7 +38,6 @@ var MenuBuilder = function(optionsHash) {
   this.hashChangeEl = function(opt_id, opt_newEl) {
     if (opt_id) {
       _hashChangeEl = this.docUtil.getOrCreateById(opt_id, 'div', 'pulse');
-      _hashChangeEl.classList.add('pulse');
       return this;
 
     } else if (opt_newEl) {
