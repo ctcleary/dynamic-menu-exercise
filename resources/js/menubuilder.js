@@ -18,8 +18,8 @@ var MenuBuilder = function(optionsHash) {
     for (var i = 0; i < menuItems.length; i++) {
       var item = menuItems[i];
 
-      var liEl = _makeEl('li', 'menuItem');
-      var anchorEl = _makeEl('a', 'menuLabel');
+      var liEl = _makeEl('li', 'menu-item');
+      var anchorEl = _makeEl('a', 'menu-label');
       anchorEl.href = item.href;
 
       var anchorText = document.createTextNode(item.label);
@@ -32,10 +32,10 @@ var MenuBuilder = function(optionsHash) {
         // If this menu has childMenuItems, add a <ul> element
         // then recursively run _menuLoopRecursive to populate the childMenu.
 
-        var childMenuMark = _makeEl('span', 'childMenuMark');
+        var childMenuMark = _makeEl('span', 'child-menu-mark');
         liEl.appendChild(childMenuMark);
 
-        var childMenu = _makeEl('ul', 'childMenu');
+        var childMenu = _makeEl('ul', 'child-menu');
         liEl.appendChild(childMenu);
         
         _menuLoopRecursive(childMenu, item.childMenuItems);
@@ -93,12 +93,12 @@ var MenuBuilder = function(optionsHash) {
       _menuLoopRecursive(topMenu, _menuJSON.menuItems);
 
       this.menuContainerEl().appendChild(topMenu);
-      this.initHashChangeHandler(this.hashChangeEl);
+      this.initHashChangeHandler();
 
       return this;
     },
 
-    initHashChangeHandler : function(hashChangeElSetterGetter) {
+    initHashChangeHandler : function() {
       if (!_hashChangeHandlerInitialized) {
         _hashChangeHandlerInitialized = true;
 
@@ -116,14 +116,17 @@ var MenuBuilder = function(optionsHash) {
 
           // Do some DOM Element gymnastics to re-trigger the CSS animation:
           // Clone, then replace the hashChangeEl, then re-set the MenuBuilder's reference.
-          var oldEl = hashChangeElSetterGetter(); // `hashChangeElSetterGetter` is scoped to MenuBuilder
+          
+          var oldEl = _this.hashChangeEl(); // Scoped to MenuBuilder
           oldEl.textContent = ''; // Clear it out.
 
           var newEl = oldEl.cloneNode(true); // Clone it
           newEl.appendChild(document.createTextNode('Navigated to: ' + newHash));
 
           oldEl.parentNode.replaceChild(newEl, oldEl); // Replace it
-          hashChangeElSetterGetter(null, newEl); // Re-set the MenuBuilder's reference to the new El.
+          _this.hashChangeEl(null, newEl); // Re-set the MenuBuilder's reference to the new El.
+
+
 
           if (prevHashChangeHandler !== undefined) {
             prevHashChangeHandler();

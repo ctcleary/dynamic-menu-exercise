@@ -137,7 +137,7 @@ body {
 	background-color: #302f2e;
 }
 
-.menu-button ul li .childMenuMark {
+.menu-button ul li .child-menu-mark {
 	position: absolute;
 	right: 10px;
 	top: 10px;
@@ -147,7 +147,7 @@ body {
 	width: 12px;
 }
 
-.menu-button ul li:hover > .childMenuMark {
+.menu-button ul li:hover > .child-menu-mark {
 	background-position: 0 -20px;
 }
 
