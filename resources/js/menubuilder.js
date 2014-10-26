@@ -48,32 +48,40 @@ var MenuBuilder = function(optionsHash) {
   var _menuJSON = optionsHash.menuJSON || { menuItems : [{ label : 'Example', href  : '#example' }] };
 
   var options = {
-    menuId :       optionsHash.menuId        || 'menu-button',
-    hashChangeId : optionsHash.hashChangeIdl || 'hash-change-notifier'
+    menuContainerId : optionsHash.menuContainerId || 'menu-button',
+    hashChangeId :    optionsHash.hashChangeIdl   || 'hash-change-notifier'
   };
 
-  var _menuContainerEl = document.getElementById(options.menuId)       || _makeEl('div', '', options.menuId);
+  var _menuContainerEl = document.getElementById(options.menuContainerId)       || _makeEl('div', '', options.menuContainerId);
   var _hashChangeEl    = document.getElementById(options.hashChangeId) || _makeEl('div', '', options.hashChangeId);
+  _hashChangeEl.classList.add('pulse');
 
-  // Helper boolean to prevent adding multiple event handlers if `.build()` is called multiple times.
+  // Helper boolean to prevent adding multiple event handlers for one menu if `.build()` is called multiple times.
   var _hashChangeHandlerInitialized = false;
 
   // Helper id to prevent adding multiple dom elements.
   var _topMenuId = 'top-menu-' + (Math.floor(Math.random()*1000));
 
   return {
-    menuEl : function(id) {
-      if (id) {
+    menuContainerEl : function(opt_id, opt_newEl) {
+      if (opt_id) {
         _menuContainerEl = document.getElementById(id) || _makeEl('div', '', id);
+        return this;
+      } else if (opt_newEl) {
+        _hashChangeEl = opt_newEl;
         return this;
       } else {
         return _menuContainerEl;
       }
     },
 
-    hashChangeEl : function(id) {
-      if (id) {
+    hashChangeEl : function(opt_id, opt_newEl) {
+      if (opt_id) {
         _hashChangeEl = document.getElementById(id) || _makeEl('div', '', id);
+        _hashChangeEl.classList.add('pulse');
+        return this;
+      } else if (opt_newEl) {
+        _hashChangeEl = opt_newEl;
         return this;
       } else {
         return _hashChangeEl;
@@ -84,15 +92,17 @@ var MenuBuilder = function(optionsHash) {
       var topMenu = document.getElementById(_topMenuId) || _makeEl('ul', 'top-menu', _topMenuId);
       _menuLoopRecursive(topMenu, _menuJSON.menuItems);
 
-      this.menuEl().appendChild(topMenu);
-      this.initHashChangeHandler(this.hashChangeEl());
+      this.menuContainerEl().appendChild(topMenu);
+      this.initHashChangeHandler(this.hashChangeEl);
 
       return this;
     },
 
-    initHashChangeHandler : function(hashChangeEl) {
+    initHashChangeHandler : function(hashChangeElSetterGetter) {
       if (!_hashChangeHandlerInitialized) {
         _hashChangeHandlerInitialized = true;
+
+        var _this = this;
 
         var prevHashChangeHandler;
         if (window.onhashchange) {
@@ -104,8 +114,16 @@ var MenuBuilder = function(optionsHash) {
         window.onhashchange = function() {
           var newHash = window.location.valueOf().hash;
 
-          hashChangeEl.textContent = '';
-          hashChangeEl.appendChild(document.createTextNode('Navigated to: ' + newHash));
+          // Do some DOM Element gymnastics to re-trigger the CSS animation:
+          // Clone, then replace the hashChangeEl, then re-set the MenuBuilder's reference.
+          var oldEl = hashChangeElSetterGetter(); // `hashChangeElSetterGetter` is scoped to MenuBuilder
+          oldEl.textContent = ''; // Clear it out.
+
+          var newEl = oldEl.cloneNode(true); // Clone it
+          newEl.appendChild(document.createTextNode('Navigated to: ' + newHash));
+
+          oldEl.parentNode.replaceChild(newEl, oldEl); // Replace it
+          hashChangeElSetterGetter(null, newEl); // Re-set the MenuBuilder's reference to the new El.
 
           if (prevHashChangeHandler !== undefined) {
             prevHashChangeHandler();

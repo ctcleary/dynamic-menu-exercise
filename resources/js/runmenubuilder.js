@@ -132,10 +132,12 @@ var menuJSON = {
 
 
 var menuBuilder = new MenuBuilder({
-	menuId : 'menu-button',
+	menuContainerId : 'menu-button',
 	hashChangeId : 'hash-change-notifier',
 	menuJSON : menuJSON
 }).build();
+
+
 
 // menuBuilder.setMenuEl('menu-button');
 // menuBuilder.initHashChangeHandler('hash-change-notifier');
