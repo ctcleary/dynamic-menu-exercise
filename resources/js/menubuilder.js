@@ -126,7 +126,7 @@ var MenuBuilder = function(optionsHash) {
           oldEl.parentNode.replaceChild(newEl, oldEl); // Replace it
           _this.hashChangeEl(null, newEl); // Re-set the MenuBuilder's reference to the new El.
 
-
+          _this._setActiveMenuItem(newHash);
 
           if (prevHashChangeHandler !== undefined) {
             prevHashChangeHandler();
@@ -137,6 +137,9 @@ var MenuBuilder = function(optionsHash) {
       return this;
     },
 
+    _setActiveMenuItem : function(hash) {
+      // var labelItems = 
+    }
 
   };
 };
