@@ -132,10 +132,11 @@ var menuJSON = {
 
 
 var menuBuilder = new MenuBuilder({
-	menuContainerId : 'menu-button',
-	hashChangeId : 'hash-change-notifier',
-	menuJSON : menuJSON
-}).build();
+  menuContainerId : 'menu-button',
+  hashChangeId : 'hash-change-notifier',
+  menuJSON : menuJSON
+});
+menuBuilder.build();
 
 
 
