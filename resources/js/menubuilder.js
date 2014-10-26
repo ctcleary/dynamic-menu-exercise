@@ -10,8 +10,9 @@ var MenuBuilder = function(optionsHash) {
     if (id) { el.id = id; }
     return el;
   }
-      // parentMenu : A `ul` or `ol` dom element.
-    // menuItems  : An array of JSON objects with keys: { label: ..., href: ..., childMenuItems: ...(optional) }. 
+  
+  // parentMenu : A `ul` or `ol` dom element.
+  // menuItems  : An array of JSON objects with keys: { label: ..., href: ..., childMenuItems: ...(optional) }. 
   function _menuLoopRecursive(parentMenu, menuItems) {
     parentMenu.innerHTML = ''; // Clean the div in case it was pre-existing.
 
@@ -79,8 +80,8 @@ var MenuBuilder = function(optionsHash) {
     hashChangeId :    optionsHash.hashChangeIdl   || 'hash-change-notifier'
   };
 
-  var _menuContainerEl = document.getElementById(options.menuContainerId)       || _makeEl('div', '', options.menuContainerId);
-  var _hashChangeEl    = document.getElementById(options.hashChangeId) || _makeEl('div', '', options.hashChangeId);
+  var _menuContainerEl = document.getElementById(options.menuContainerId) || _makeEl('div', '', options.menuContainerId);
+  var _hashChangeEl    = document.getElementById(options.hashChangeId)    || _makeEl('div', '', options.hashChangeId);
   _hashChangeEl.classList.add('pulse');
 
   // Helper boolean to prevent adding multiple event handlers for one menu if `.build()` is called multiple times.
