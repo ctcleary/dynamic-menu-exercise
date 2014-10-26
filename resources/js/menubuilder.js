@@ -10,13 +10,6 @@ var MenuBuilder = function(optionsHash) {
     if (opt_id) { el.id = opt_id; }
     return el;
   }
-
-  function _makeIdEl(type, id) {
-    _makeEl(type, '', id);
-  }
-
-  // _makeClassEl
-  // _makeEl('div', '', 'menu-button');
   
   // parentMenu : A `ul` or `ol` dom element.
   // menuItems  : An array of JSON objects with keys: { label: ..., href: ..., childMenuItems: ...(optional) }. 
@@ -101,7 +94,7 @@ var MenuBuilder = function(optionsHash) {
   return {
     menuContainerEl : function(opt_id, opt_newEl) {
       if (opt_id) {
-        _menuContainerEl = document.getElementById(id) || _makeEl('div', '', id);
+        _menuContainerEl = document.getElementById(opt_id) || _makeEl('div', '', opt_id);
         return this;
       } else if (opt_newEl) {
         _hashChangeEl = opt_newEl;
@@ -113,7 +106,7 @@ var MenuBuilder = function(optionsHash) {
 
     hashChangeEl : function(opt_id, opt_newEl) {
       if (opt_id) {
-        _hashChangeEl = document.getElementById(id) || _makeEl('div', '', id);
+        _hashChangeEl = document.getElementById(opt_id) || _makeEl('div', '', opt_id);
         _hashChangeEl.classList.add('pulse');
         return this;
       } else if (opt_newEl) {
@@ -132,7 +125,7 @@ var MenuBuilder = function(optionsHash) {
       this.initHashChangeHandler();
 
       if (window.location.valueOf().hash) {
-        this._setActiveMenuItem(window.location.valueOf().hash);
+        _setActiveMenuItem(window.location.valueOf().hash);
       }
 
       return this;
