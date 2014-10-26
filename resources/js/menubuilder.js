@@ -10,13 +10,6 @@ var MenuBuilder = function(optionsHash) {
     if (opt_id) { el.id = opt_id; }
     return el;
   }
-
-  function _makeIdEl(type, id) {
-    _makeEl(type, '', id);
-  }
-
-  // _makeClassEl
-  // _makeEl('div', '', 'menu-button');
   
   // parentMenu : A `ul` or `ol` dom element.
   // menuItems  : An array of JSON objects with keys: { label: ..., href: ..., childMenuItems: ...(optional) }. 
@@ -77,6 +70,8 @@ var MenuBuilder = function(optionsHash) {
 
   // -- PRIVATE VARIABLES --
   // Use the passed options or establish defaults.
+  var docUtil = new DocumentUtility();
+
   var _menuJSON = optionsHash.menuJSON || { menuItems : [{ label : 'Example', href  : '#example' }] };
 
   var options = {
@@ -101,7 +96,7 @@ var MenuBuilder = function(optionsHash) {
   return {
     menuContainerEl : function(opt_id, opt_newEl) {
       if (opt_id) {
-        _menuContainerEl = document.getElementById(id) || _makeEl('div', '', id);
+        _menuContainerEl = docUtil.getOrCreateById(opt_id);
         return this;
       } else if (opt_newEl) {
         _hashChangeEl = opt_newEl;
@@ -113,7 +108,7 @@ var MenuBuilder = function(optionsHash) {
 
     hashChangeEl : function(opt_id, opt_newEl) {
       if (opt_id) {
-        _hashChangeEl = document.getElementById(id) || _makeEl('div', '', id);
+        _hashChangeEl = docUtil.getOrCreateById(opt_id);
         _hashChangeEl.classList.add('pulse');
         return this;
       } else if (opt_newEl) {
@@ -125,7 +120,7 @@ var MenuBuilder = function(optionsHash) {
     },
     
     build : function() {
-      var topMenu = document.getElementById(_topMenuId) || _makeEl('ul', 'top-menu', _topMenuId);
+      var topMenu = docUtil.getOrCreateById(_topMenuId, 'ul', 'top-menu');
       _menuLoopRecursive(topMenu, _menuJSON.menuItems);
 
       this.menuContainerEl().appendChild(topMenu);
@@ -152,7 +147,7 @@ var MenuBuilder = function(optionsHash) {
         }
 
         window.onhashchange = function() {
-          var newHash = window.location.valueOf().hash;
+          var newHash = this.getHashPath();
 
           // Do some DOM Element gymnastics to re-trigger the CSS animation:
           // Clone, then replace the hashChangeEl, then re-set the MenuBuilder's reference.
@@ -177,4 +172,65 @@ var MenuBuilder = function(optionsHash) {
       return this;
     }
   };
+};
+
+MenuBuilder.prototype = {
+  getHashPath: function() {
+    return window.location.valueOf().hash;
+  },
+
+  _setActiveMenuItem: function(hash) {
+    var labelEls = docUtil.getByClassName('menu-label');
+    var currActiveEl;
+    var newActiveEl;
+
+    for (var i = 0; i < labelEls.length; i++) {
+      if (!currActiveEl && !newActiveEl) {
+        var currLabelHash = labelEls[i].href.substr(labelEls[i].href.indexOf('#'));
+        if (currLabelHash === hash) {
+          newActiveEl = labelEls[i];
+        }
+
+        if (labelEls[i].classList.contains('active')) {
+          currActiveEl = labelEls[i];
+        }
+      }
+    }
+
+    if (currActiveEl) {
+      currActiveEl.classList.remove('active');
+    }
+    newActiveEl.classList.add('active');
+  },
+
+  _menuLoopRecursive: function(parentMenu, menuItems) {
+    parentMenu.innerHTML = ''; // Clean the div in case it was pre-existing.
+
+    for (var i = 0; i < menuItems.length; i++) {
+      var item = menuItems[i];
+
+      var liEl = _makeEl('li', 'menu-item');
+      var anchorEl = _makeEl('a', 'menu-label');
+      anchorEl.href = item.href;
+
+      var anchorText = document.createTextNode(item.label);
+      anchorEl.appendChild(anchorText);
+
+      liEl.appendChild(anchorEl);
+      parentMenu.appendChild(liEl);
+
+      if (item.childMenuItems) {
+        // If this menu has childMenuItems, add a <ul> element
+        // then recursively run _menuLoopRecursive to populate the childMenu.
+
+        var childMenuMark = _makeEl('span', 'child-menu-mark');
+        liEl.appendChild(childMenuMark);
+
+        var childMenu = _makeEl('ul', 'child-menu');
+        liEl.appendChild(childMenu);
+        
+        _menuLoopRecursive(childMenu, item.childMenuItems);
+      }
+    }
+  }
 };
