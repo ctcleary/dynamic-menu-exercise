@@ -22,8 +22,7 @@ var MenuBuilder = function(optionsHash) {
 
   // ----------------------
   // -- PUBLIC FUNCTIONS --
-  // ----------------------
-  // Set an el using a passed element, or return existing element.
+  // ----------------------\
   this.menuContainerEl = function(opt_el) {
     if (opt_el) {
       _menuContainerEl = opt_el;
@@ -33,7 +32,6 @@ var MenuBuilder = function(optionsHash) {
     }
   };
 
-  // Set an el using a passed element, or return existing element.
   this.hashChangeEl = function(opt_el) {
     if (opt_el) {
       _hashChangeEl = opt_el;
@@ -44,18 +42,18 @@ var MenuBuilder = function(optionsHash) {
   };
     
   this.build = function() {
-    // Create the menu from the JSON object.
+    // Create the menu from the JSON object, and append it to the container.
     var topMenu = this.docUtil.getOrCreateById(_topMenuElId, 'ul', 'top-menu');
     this.menuLoopRecursive(topMenu, _menuJSON.menuItems);
-
-    // Append it to the container and add the hash change handler.
     this.menuContainerEl().appendChild(topMenu);
-    this.initHashChangeHandler();
 
     // If we currently have a hash path, set the active menu item.
     if (this.getHashPath()) {
       this.setActiveMenuItem(this.getHashPath());
     }
+
+    // Add the hash change handler for to being fancy.
+    this.initHashChangeHandler();
 
     return this;
   };
