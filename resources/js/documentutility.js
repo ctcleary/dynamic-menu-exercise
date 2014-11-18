@@ -1,6 +1,4 @@
-var DocumentUtility = function() {
-
-};
+var DocumentUtility = function() {};
 
 DocumentUtility.prototype = {
   makeEl: function(type) {
