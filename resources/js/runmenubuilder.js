@@ -133,7 +133,10 @@ var menuJSON = {
 // Create and build the actual menu.
 var menuBuilder = new MenuBuilder({
   menuJSON : menuJSON,
-  menuContainerId : 'menu-button',
-  hashChangeId : 'hash-change-notifier'
+  menuContainerId : 'menu-button',      // Existing element id
+  hashChangeId : 'hash-change-notifier' // Existing element id
 });
+// Since we've added an existing element as the container,
+// all we need to do is run .build() and the cascading menu will
+// append itself to the '#menu-button' element.
 menuBuilder.build();
