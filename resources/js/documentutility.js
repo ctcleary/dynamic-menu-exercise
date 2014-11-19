@@ -1,6 +1,12 @@
 var DocumentUtility = function() {};
 
 DocumentUtility.prototype = {
+
+  makeUniqueId: function(idPrefix) {
+    var prefix = (idPrefix) ? idPrefix : 'uid-';
+    return prefix + Date.now() + Math.floor(Math.random()*1000);
+  },
+
   makeEl: function(type) {
     return document.createElement(type);
   },
@@ -44,5 +50,9 @@ DocumentUtility.prototype = {
         return this.makeElWithId(type, id);
       }
     }
+  },
+
+  getHashPath: function() {
+    return window.location.valueOf().hash;
   }
 };

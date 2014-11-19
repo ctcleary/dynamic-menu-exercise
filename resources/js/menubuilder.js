@@ -13,7 +13,7 @@ var MenuBuilder = function(optionsHash) {
   };
   // Helpers
   var _hashChangeHandlerInitialized = false;  // Help prevent redundant/multiple event handlers
-  var _topMenuElId = this.makeUniqueId('top-menu-'); // Prevent redundant els
+  var _topMenuElId = this.docUtil.makeUniqueId('top-menu-'); // Prevent redundant els
 
   // Elements: Create the top <ul> element.
   var _topMenuEl       = this.docUtil.makeElWithIdAndClass('ul', _topMenuElId, 'top-menu'); // Created new 
@@ -22,9 +22,21 @@ var MenuBuilder = function(optionsHash) {
   var _menuContainerEl = this.docUtil.getOrCreateById(_options.menuContainerId, 'div');
   var _hashChangeEl    = this.docUtil.getOrCreateById(_options.hashChangeId, 'div', 'pulse');
 
-  // ----------------------
-  // -- PUBLIC FUNCTIONS --
-  // ----------------------
+  // --------------------
+  // -- SETTER/GETTERS --
+  // ---------------------
+  this.menuJSON = function() {
+    return _menuJSON;
+  };
+
+  this.isHashChangeHandlerInitialized = function(opt_setTo) {
+    if (opt_setTo) {
+      _hashChangeHandlerInitialized = opt_setTo;
+    } else {
+      return _hashChangeHandlerInitialized;
+    }
+  };
+
   this.el = function() {
     return _topMenuEl;
   };
@@ -46,72 +58,66 @@ var MenuBuilder = function(optionsHash) {
       return _hashChangeEl;
     }
   };
+};
+
+MenuBuilder.prototype = {
+  docUtil: new DocumentUtility(),
     
-  this.build = function() {
+  build: function() {
     // Create the menu from the JSON object, and append it to the container.
-    this.menuLoopRecursive(_topMenuEl, _menuJSON.menuItems);
-    this.menuContainerEl().appendChild(_topMenuEl);
+    this.menuLoopRecursive(this.el(), this.menuJSON().menuItems);
+    this.menuContainerEl().appendChild(this.el());
 
     // If we currently have a hash path, set the active menu item.
-    if (this.getHashPath()) {
-      this.setActiveMenuItem(this.getHashPath());
+    if (this.docUtil.getHashPath()) {
+      this.setActiveMenuItem(this.docUtil.getHashPath());
     }
 
     // Add the hash change handler for to being fancy.
     this.initHashChangeHandler();
 
     return this;
-  };
-
-  this.initHashChangeHandler = function() {
-    // Only do the work if needed, no redundant handlers.
-    if (_hashChangeHandlerInitialized) {
-      return;
-    }
-    _hashChangeHandlerInitialized = true;
-
-    // Don't prevent any other onhashchange handlers from doing their job.
-    var prevHashChangeHandler;
-    if (window.onhashchange) {
-      prevHashChangeHandler = window.onhashchange;
-    }
-
-    var _this = this;
-    window.onhashchange = function() {      
-      _this.cloneAndReplaceHashChangeEl(); // Re-trigger CSS Animation on notifier.
-      _this.setActiveMenuItem(_this.getHashPath()); // Set css for 'active' menu item.
-
-      if (prevHashChangeHandler !== undefined) {
-        prevHashChangeHandler(); // If we have a previous handler, call that too.
-      }
-    };
-
-    return this;
-  };
-
-  this.cloneAndReplaceHashChangeEl = function() {
-      // Do some DOM Element gymnastics so we can re-trigger the CSS animation:
-      var oldEl = this.hashChangeEl(); // Get it
-      var newEl = oldEl.cloneNode(true); // Clone it
-      newEl.textContent = ''; // Clear out the Clone, then change contents
-      newEl.appendChild(document.createTextNode('Navigated to: ' + this.getHashPath()));
-
-      oldEl.parentNode.replaceChild(newEl, oldEl); // Replace old with new.
-      this.hashChangeEl(newEl); // Re-set the MenuBuilder's reference to the newEl.
-      return this;
-  };
-};
-
-MenuBuilder.prototype = {
-  docUtil: new DocumentUtility(),
-
-  getHashPath: function() {
-    return window.location.valueOf().hash;
   },
 
-  makeUniqueId: function(idPrefix) {
-    var prefix = (idPrefix) ? idPrefix : 'uid-';
-    return prefix + Date.now() + Math.floor(Math.random()*1000);
+  menuLoopRecursive: function(parentMenuEl, menuItems) {
+    parentMenuEl.innerHTML = ''; // Clean the div in case it was pre-existing.
+
+    for (var i = 0; i < menuItems.length; i++) {
+      var currItem = menuItems[i];
+      var menuItemEl = this.makeMenuItemEl(currItem);
+      parentMenuEl.appendChild(menuItemEl);
+
+      if (currItem.childMenuItems) {
+        var childMenuEl = this.setupChildMenuEl(menuItemEl);        
+        this.menuLoopRecursive(childMenuEl, currItem.childMenuItems); // Run recursively for childMenuItems
+      }
+    }
+  },
+
+  makeMenuItemEl: function(item) {
+    // <li class="menu-item"> 
+    //    <a class="menu-label" href="{{ item.href }}"> 
+    //      {{ item.label }} 
+    //    </a> 
+    // </li>
+    var liEl      = this.docUtil.makeElWithClass('li', 'menu-item');
+    var anchorEl  = this.docUtil.makeElWithClass('a', 'menu-label');
+    
+    anchorEl.href = item.href;
+    anchorEl.appendChild(document.createTextNode(item.label));
+
+    liEl.appendChild(anchorEl);
+    return liEl;
+  },
+
+  setupChildMenuEl: function(parentMenuItemEl) {
+    var childMenuEl   = this.docUtil.makeElWithClass('ul', 'child-menu');
+    var childMenuMark = this.docUtil.makeElWithClass('span', 'child-menu-mark');
+
+    parentMenuItemEl.appendChild(childMenuMark); // Add a UI marker
+    parentMenuItemEl.appendChild(childMenuEl);   // Add a <ul> element
+
+    return childMenuEl; // Return <ul> element
   },
 
   setActiveMenuItem: function(searchHash) {
@@ -149,44 +155,41 @@ MenuBuilder.prototype = {
     return;
   },
 
-  menuLoopRecursive: function(parentMenu, menuItems) {
-    parentMenu.innerHTML = ''; // Clean the div in case it was pre-existing.
-
-    for (var i = 0; i < menuItems.length; i++) {
-      var currItem = menuItems[i];
-      var menuItemEl = this.makeMenuItemEl(currItem);
-      parentMenu.appendChild(menuItemEl);
-
-      if (currItem.childMenuItems) {
-        var childMenuEl = this.setupChildMenuEl(menuItemEl);        
-        this.menuLoopRecursive(childMenuEl, currItem   .childMenuItems); // Run recursively for childMenuItems
-      }
+  initHashChangeHandler: function() {
+    // Only do the work if needed, no redundant handlers.
+    if (this.isHashChangeHandlerInitialized()) {
+      return;
     }
+    this.isHashChangeHandlerInitialized(true);
+
+    // Don't prevent any other onhashchange handlers from doing their job.
+    var prevHashChangeHandler;
+    if (window.onhashchange) {
+      prevHashChangeHandler = window.onhashchange;
+    }
+
+    var _this = this;
+    window.onhashchange = function() {      
+      _this.cloneAndReplaceHashChangeEl(); // Re-trigger CSS Animation on notifier.
+      _this.setActiveMenuItem(_this.docUtil.getHashPath()); // Set css for 'active' menu item.
+
+      if (prevHashChangeHandler !== undefined) {
+        prevHashChangeHandler(); // If we have a previous handler, call that too.
+      }
+    };
+
+    return this;
   },
 
-  makeMenuItemEl: function(item) {
-    // <li class="menu-item"> 
-    //    <a class="menu-label" href="{{ item.href }}"> 
-    //      {{ item.label }} 
-    //    </a> 
-    // </li>
-    var liEl      = this.docUtil.makeElWithClass('li', 'menu-item');
-    var anchorEl  = this.docUtil.makeElWithClass('a', 'menu-label');
-    
-    anchorEl.href = item.href;
-    anchorEl.appendChild(document.createTextNode(item.label));
+  cloneAndReplaceHashChangeEl: function() {
+    // Do some DOM Element gymnastics so we can re-trigger the CSS animation:
+    var oldEl = this.hashChangeEl(); // Get it
+    var newEl = oldEl.cloneNode(true); // Clone it
+    newEl.textContent = ''; // Clear out the Clone, then change contents
+    newEl.appendChild(document.createTextNode('Navigated to: ' + this.docUtil.getHashPath()));
 
-    liEl.appendChild(anchorEl);
-    return liEl;
-  },
-
-  setupChildMenuEl: function(parentMenuItemEl) {
-    var childMenuEl   = this.docUtil.makeElWithClass('ul', 'child-menu');
-    var childMenuMark = this.docUtil.makeElWithClass('span', 'child-menu-mark');
-
-    parentMenuItemEl.appendChild(childMenuMark); // Add a UI marker
-    parentMenuItemEl.appendChild(childMenuEl);   // Add a <ul> element
-
-    return childMenuEl; // Return <ul> element
+    oldEl.parentNode.replaceChild(newEl, oldEl); // Replace old with new.
+    this.hashChangeEl(newEl); // Re-set the MenuBuilder's reference to the newEl.
+    return this;
   }
 };
