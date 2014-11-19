@@ -140,3 +140,45 @@ var menuBuilder = new MenuBuilder({
 // all we need to do is run .build() and the cascading menu will
 // append itself to the '#menu-button' element.
 menuBuilder.build();
+
+
+// Example alternate usage.
+var menuJSON2 = {
+  menuItems: [
+    {
+      label: 'No Hash Notifier',
+      href: '#no-hash-change'
+    },
+    {
+      label: 'For This Example',
+      href: '#for-this-example'
+    },
+    {
+      label: 'Alternate',
+      href: '#alternate'
+    },
+    {
+      label: 'Usage',
+      href: '#usage',
+      childMenuItems: [
+        {
+          label: 'Usage Child 1',
+          href: '#usage-child-1'
+        },
+        {
+          label: 'Usage Child 2',
+          href: '#usage-child-2'
+        }
+      ]
+    },
+  ]
+};
+
+// No existing menuContainer, 
+// and this menuBuilder's hashChangeEl is never added to the document.
+var menuBuilder2 = new MenuBuilder({
+  menuJSON : menuJSON2
+});
+menuBuilder2.build();
+var menuBuilder2Container = menuBuilder2.menuContainerEl();
+document.getElementById('menu-container-bar').appendChild(menuBuilder2Container);

@@ -5,22 +5,31 @@ var MenuBuilder = function(optionsHash) {
 
   // -- PRIVATE VARIABLES --
 
+  // OPTIONS
   // Use the provided options from `optionsHash` or fall back to defaults.
   var _menuJSON = optionsHash.menuJSON; // menuJSON is required.
   var _options = {
-    menuContainerId : optionsHash.menuContainerId || 'menu-button',
-    hashChangeId :    optionsHash.hashChangeIdl   || 'hash-change-notifier'
+    menuContainerId : optionsHash.menuContainerId || this.DocUtil.makeUniqueId('menu-button-'),
+    hashChangeId :    optionsHash.hashChangeId    || this.DocUtil.makeUniqueId('hash-change-notifier-')
   };
-  // Elements: Get existing container elements OR create new elements dynamically
-  var _menuContainerEl = this.DocUtil.getOrCreateById(_options.menuContainerId, 'div');
+
+  // ELEMENTS
+  // Get existing container elements OR create new elements dynamically
+  var _menuContainerEl = this.DocUtil.getOrCreateById(_options.menuContainerId, 'div', 'menu-button');
   var _hashChangeEl    = this.DocUtil.getOrCreateById(_options.hashChangeId, 'div', 'pulse');
 
-  // Elements: Create the top <ul> element.
+  // Make sure container has an icon.
+  if (!this.hasIconTag(_menuContainerEl)) {
+    _menuContainerEl.appendChild(this.DocUtil.makeEl('i'));
+  }
+
+  // Create the top <ul> element.
   var _topMenuElId     = this.DocUtil.makeUniqueId('top-menu-'); // Prevent redundant els
   var _topMenuEl       = this.DocUtil.makeElWithIdAndClass('ul', _topMenuElId, 'top-menu'); // Created new 
 
-  // Helpers
+  // HELPER(S)
   var _hashChangeHandlerInitialized = false;  // Helper: prevent redundant/multiple event handlers
+  var _labelEls = []; // Optimization
 
 
   // -- SETTER/GETTERS --
@@ -51,6 +60,14 @@ var MenuBuilder = function(optionsHash) {
     }
   };
 
+  this.labelEls = function(opt_reassess) {
+    // Gather this array only when needed.
+    if (opt_reassess || _labelEls.length === 0) {
+      _labelEls = this.DocUtil.getDescendantsByClassName(this.el(), 'menu-label');
+    }
+    return _labelEls;
+  };
+
   this.isHashChangeHandlerInitialized = function(opt_setTo) {
     if (opt_setTo) {
       _hashChangeHandlerInitialized = opt_setTo;
@@ -75,6 +92,9 @@ MenuBuilder.prototype = {
 
     // Add the hash change handler for to being fancy.
     this.initHashChangeHandler();
+
+    // Re-assess our labelEls array
+    this.labelEls(true);
 
     return this;
   },
@@ -120,7 +140,7 @@ MenuBuilder.prototype = {
   },
 
   setActiveMenuItem: function(searchHash) {
-    var labelEls = this.DocUtil.getByClassName('menu-label');
+    var labelEls = this.labelEls();
     var prevActiveEl;
     var newActiveEl;
 
@@ -137,7 +157,11 @@ MenuBuilder.prototype = {
     if (prevActiveEl) {
       prevActiveEl.classList.remove('active');
     }
-    newActiveEl.classList.add('active');
+    if (newActiveEl) { // In case current hash is on another MenuBuilder instance
+      newActiveEl.classList.add('active');
+      return true;
+    }
+    return false;
   },
 
   isNewActiveEl: function(labelEl, searchHash) {
@@ -167,8 +191,10 @@ MenuBuilder.prototype = {
 
     var _this = this;
     window.onhashchange = function() {      
-      _this.cloneAndReplaceHashChangeEl(); // Re-trigger CSS Animation on notifier.
-      _this.setActiveMenuItem(_this.DocUtil.getHashPath()); // Set css for 'active' menu item.
+      var thisHasNewActive = _this.setActiveMenuItem(_this.DocUtil.getHashPath()); // Set css for 'active' menu item.
+      if (thisHasNewActive) {
+        _this.cloneAndReplaceHashChangeEl(); // Re-trigger CSS Animation on notifier.
+      }
 
       if (prevHashChangeHandler !== undefined) {
         prevHashChangeHandler(); // If we have a previous handler, call that too.
@@ -181,12 +207,22 @@ MenuBuilder.prototype = {
   cloneAndReplaceHashChangeEl: function() {
     // Do some DOM Element gymnastics so we can re-trigger the CSS animation:
     var oldEl = this.hashChangeEl(); // Get it
-    var newEl = oldEl.cloneNode(true); // Clone it
+    if (!oldEl.parentNode) {
+      // This MenuBuilder's hashChangeEl was never appended to the document.
+      return;
+    }
+
+    var newEl = oldEl.cloneNode(true); // Clone the oldEl
     newEl.textContent = ''; // Clear out the Clone, then change contents
     newEl.appendChild(document.createTextNode('Navigated to: ' + this.DocUtil.getHashPath()));
 
     oldEl.parentNode.replaceChild(newEl, oldEl); // Replace old with new.
     this.hashChangeEl(newEl); // Re-set the MenuBuilder's reference to the newEl.
     return this;
+  },
+
+  hasIconTag: function(menuContainerEl) {
+    return menuContainerEl.children[0] &&
+      menuContainerEl.children[0].tagName.toLowerCase() === "i";
   }
 };

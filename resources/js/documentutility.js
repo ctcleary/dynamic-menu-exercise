@@ -38,6 +38,31 @@ DocumentUtility.prototype = {
     return document.getElementsByClassName(className);
   },
 
+  getChildrenByClassName: function(parentEl, className) {
+    var result = [];
+    var children = parentEl.children;
+    for (var i = 0; i < children.length; i++) {
+      if (children[i].classList.contains(className)) {
+        result.push(children[i]);
+      }
+    }
+    return result;
+  },
+
+  getDescendantsByClassName: function(parentEl, className) {
+    var result = [];
+    var children = parentEl.children;
+    for (var i = 0; i < children.length; i++) {
+      if (children[i].classList.contains(className)) {
+        result.push(children[i]);
+      }
+      // Also search recursively all the way down.
+      var subResult = this.getDescendantsByClassName(children[i], className);
+      result = result.concat(subResult);
+    }
+    return result;
+  },
+
   getOrCreateById: function(id, type, opt_classNames) {
     if (this.getElById(id)) {
       return this.getElById(id);
