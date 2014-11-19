@@ -22,7 +22,6 @@ var MenuBuilder = function(optionsHash) {
   var _menuContainerEl = this.docUtil.getOrCreateById(_options.menuContainerId, 'div');
   var _hashChangeEl    = this.docUtil.getOrCreateById(_options.hashChangeId, 'div', 'pulse');
 
-
   // ----------------------
   // -- PUBLIC FUNCTIONS --
   // ----------------------
