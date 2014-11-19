@@ -146,12 +146,8 @@ menuBuilder.build();
 var menuJSON2 = {
   menuItems: [
     {
-      label: 'No Hash Notifier',
-      href: '#no-hash-change'
-    },
-    {
-      label: 'For This Example',
-      href: '#for-this-example'
+      label: 'An Example Of',
+      href: '#an-example-of'
     },
     {
       label: 'Alternate',
@@ -174,10 +170,10 @@ var menuJSON2 = {
   ]
 };
 
-// No existing menuContainer, 
-// and this menuBuilder's hashChangeEl is never added to the document.
+// No existing menuContainer.
 var menuBuilder2 = new MenuBuilder({
-  menuJSON : menuJSON2
+  menuJSON : menuJSON2,
+  hashChangeId : 'hash-change-notifier' // Existing element id
 });
 menuBuilder2.build();
 var menuBuilder2Container = menuBuilder2.menuContainerEl();

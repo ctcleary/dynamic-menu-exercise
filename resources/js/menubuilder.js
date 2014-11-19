@@ -205,19 +205,24 @@ MenuBuilder.prototype = {
   },
 
   cloneAndReplaceHashChangeEl: function() {
-    // Do some DOM Element gymnastics so we can re-trigger the CSS animation:
     var oldEl = this.hashChangeEl(); // Get it
     if (!oldEl.parentNode) {
       // This MenuBuilder's hashChangeEl was never appended to the document.
       return;
     }
 
-    var newEl = oldEl.cloneNode(true); // Clone the oldEl
-    newEl.textContent = ''; // Clear out the Clone, then change contents
-    newEl.appendChild(document.createTextNode('Navigated to: ' + this.DocUtil.getHashPath()));
+    // Do some DOM Element gymnastics so we can re-trigger the CSS animation:
+    // Remove the el, and class, then re-add the el and the class to re-trigger the animation.
+    var parentNode = oldEl.parentNode;
+    parentNode.removeChild(oldEl);
 
-    oldEl.parentNode.replaceChild(newEl, oldEl); // Replace old with new.
-    this.hashChangeEl(newEl); // Re-set the MenuBuilder's reference to the newEl.
+    oldEl.classList.remove('pulse');
+    oldEl.textContent = ''; // Clear out the Clone, then change contents
+    oldEl.appendChild(document.createTextNode('Navigated to: ' + this.DocUtil.getHashPath()));
+    parentNode.appendChild(oldEl);
+
+    oldEl.classList.add('pulse');
+
     return this;
   },
 
