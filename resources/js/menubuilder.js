@@ -212,15 +212,16 @@ MenuBuilder.prototype = {
     }
 
     // Do some DOM Element gymnastics so we can re-trigger the CSS animation:
-    // Remove the el, and class, then re-add the el and the class to re-trigger the animation.
+    // Remove the el and remove the 'pulse' class, 
     var parentNode = oldEl.parentNode;
     parentNode.removeChild(oldEl);
-
     oldEl.classList.remove('pulse');
+
     oldEl.textContent = ''; // Clear out the Clone, then change contents
     oldEl.appendChild(document.createTextNode('Navigated to: ' + this.DocUtil.getHashPath()));
+    
+    // Then re-add the el and the 'pulse' class to re-trigger the animation.
     parentNode.appendChild(oldEl);
-
     oldEl.classList.add('pulse');
 
     return this;
