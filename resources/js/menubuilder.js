@@ -9,14 +9,14 @@ var MenuBuilder = function(optionsHash) {
   // Use the provided options from `optionsHash` or fall back to defaults.
   var _menuJSON = optionsHash.menuJSON; // menuJSON is required.
   var _options = {
-    menuContainerId : optionsHash.menuContainerId || this.DocUtil.makeUniqueId('menu-button-'),
-    hashChangeId :    optionsHash.hashChangeId    || this.DocUtil.makeUniqueId('hash-change-notifier-')
+    menuContainerId: optionsHash.menuContainerId || this.DocUtil.makeUniqueId('menu-button-'),
+    hashChangeId: optionsHash.hashChangeId || this.DocUtil.makeUniqueId('hash-change-notifier-')
   };
 
   // ELEMENTS
   // Get existing container elements OR create new elements dynamically
   var _menuContainerEl = this.DocUtil.getOrCreateById(_options.menuContainerId, 'div', 'menu-button');
-  var _hashChangeEl    = this.DocUtil.getOrCreateById(_options.hashChangeId, 'div', 'pulse');
+  var _hashChangeEl = this.DocUtil.getOrCreateById(_options.hashChangeId, 'div', 'pulse');
 
   // Make sure container has an icon.
   if (!this.hasIconTag(_menuContainerEl)) {
@@ -24,11 +24,11 @@ var MenuBuilder = function(optionsHash) {
   }
 
   // Create the top <ul> element.
-  var _topMenuElId     = this.DocUtil.makeUniqueId('top-menu-'); // Prevent redundant els
-  var _topMenuEl       = this.DocUtil.makeElWithIdAndClass('ul', _topMenuElId, 'top-menu'); // Created new 
+  var _topMenuElId = this.DocUtil.makeUniqueId('top-menu-'); // Prevent redundant els
+  var _topMenuEl = this.DocUtil.makeElWithIdAndClass('ul', _topMenuElId, 'top-menu'); // Created new 
 
   // HELPER(S)
-  var _hashChangeHandlerInitialized = false;  // Helper: prevent redundant/multiple event handlers
+  var _hashChangeHandlerInitialized = false; // Helper: prevent redundant/multiple event handlers
   var _labelEls = []; // Optimization
 
 
@@ -79,7 +79,7 @@ var MenuBuilder = function(optionsHash) {
 
 MenuBuilder.prototype = {
   DocUtil: new DocumentUtility(),
-    
+
   build: function() {
     // Create the menu from the JSON object, and append it to the container.
     this.menuLoopRecursive(this.el(), this.menuJSON().menuItems);
@@ -108,7 +108,7 @@ MenuBuilder.prototype = {
       parentMenuEl.appendChild(menuItemEl);
 
       if (currItem.childMenuItems) {
-        var childMenuEl = this.setupChildMenuEl(menuItemEl);        
+        var childMenuEl = this.setupChildMenuEl(menuItemEl);
         this.menuLoopRecursive(childMenuEl, currItem.childMenuItems); // Run recursively for childMenuItems
       }
     }
@@ -120,9 +120,9 @@ MenuBuilder.prototype = {
     //      {{ item.label }} 
     //    </a> 
     // </li>
-    var liEl      = this.DocUtil.makeElWithClass('li', 'menu-item');
-    var anchorEl  = this.DocUtil.makeElWithClass('a', 'menu-label');
-    
+    var liEl = this.DocUtil.makeElWithClass('li', 'menu-item');
+    var anchorEl = this.DocUtil.makeElWithClass('a', 'menu-label');
+
     anchorEl.href = item.href;
     anchorEl.appendChild(document.createTextNode(item.label));
 
@@ -134,7 +134,7 @@ MenuBuilder.prototype = {
     var childMenuMarkEl = this.DocUtil.makeElWithClass('span', 'child-menu-mark');
     parentMenuItemEl.appendChild(childMenuMarkEl); // Add a UI marker
 
-    var childMenuEl   = this.DocUtil.makeElWithClass('ul', 'child-menu'); // Create the <ul> el
+    var childMenuEl = this.DocUtil.makeElWithClass('ul', 'child-menu'); // Create the <ul> el
     parentMenuItemEl.appendChild(childMenuEl); // Add the <ul> el
     return childMenuEl; // Return the <ul> el
   },
@@ -190,7 +190,7 @@ MenuBuilder.prototype = {
     }
 
     var _this = this;
-    window.onhashchange = function() {      
+    window.onhashchange = function() {
       var thisHasNewActive = _this.setActiveMenuItem(_this.DocUtil.getHashPath()); // Set css for 'active' menu item.
       if (thisHasNewActive) {
         _this.cloneAndReplaceHashChangeEl(); // Re-trigger CSS Animation on notifier.
@@ -219,7 +219,7 @@ MenuBuilder.prototype = {
 
     oldEl.textContent = ''; // Clear out the Clone, then change contents
     oldEl.appendChild(document.createTextNode('Navigated to: ' + this.DocUtil.getHashPath()));
-    
+
     // Then re-add the el and the 'pulse' class to re-trigger the animation.
     parentNode.appendChild(oldEl);
     oldEl.classList.add('pulse');

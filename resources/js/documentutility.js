@@ -4,7 +4,7 @@ DocumentUtility.prototype = {
 
   makeUniqueId: function(idPrefix) {
     var prefix = (idPrefix) ? idPrefix : 'uid-';
-    return prefix + Date.now() + Math.floor(Math.random()*1000);
+    return prefix + Date.now() + Math.floor(Math.random() * 1000);
   },
 
   makeEl: function(type) {
